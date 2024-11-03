@@ -20,7 +20,13 @@ def inter(program_lines):
     condition_code = ""  # Holds code within the condition
 
     for line in program_lines:
-        parts = line.split(" ")
+        # Remove leading and trailing whitespace (including tabs) from the line
+        line = line.strip()
+        # Split the line into parts and strip whitespace from each part
+        parts = [part.strip() for part in line.split(" ") if part.strip()]
+        if not parts:
+            continue  # Skip empty lines
+        
         opcode = parts[0]
         line_code = ""
 
@@ -76,7 +82,7 @@ def compile_and_run_code(program_lines):
     c_code = "#include <stdio.h>\nint main() {\n"
     c_code += inter(program_lines)
     c_code += "    return 0;\n}"
-    print(c_code)
+
     with tempfile.NamedTemporaryFile(delete=False, suffix=".c") as c_file:
         c_file.write(c_code.encode('utf-8'))
         c_file_path = c_file.name
@@ -96,7 +102,9 @@ def compile_text():
     if not code:
         return jsonify({"error": "No code provided"}), 400
 
-    program_lines = code.splitlines()
+    # Split the code into lines and strip whitespace from each line
+    program_lines = [line.strip() for line in code.splitlines()]
+
     output = compile_and_run_code(program_lines)
     return jsonify({"output": output})
 
