@@ -57,7 +57,7 @@ FIN POUR</code></pre>
             outputElement.textContent = "Running...";
 
             try {
-                const response = await fetch("http://127.0.0.1:5000/compile", {
+                const response = await fetch("https://online-compiler-flask.onrender.com//compile", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ code: code })
